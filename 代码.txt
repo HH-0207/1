@@ -1,0 +1,414 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+#include<time.h>
+
+struct  Date                          【结构体类型】
+{       
+    int   month;
+    int   day; 
+};
+//日期
+
+typedef struct student{         【用typedef 把 struct student 这个结构体类型名字重新定义为student，也就是说（struct student和student表示同一个事物），都是一个类型的标识符，】
+//类型  	
+	char name[20];             
+	//名称 
+	struct Date time;				
+	//缺课时间 
+	int course;             
+	//第几节课 
+	char name1[40];         
+	//缺课名称 
+	char classs[40];        
+	//缺课类型
+}SSTUDENT;
+#define SSTUDENT_LEN sizeof(SSTUDENT) 
+ //SSTUDENT_LEN为学生类型占用存储空间的大小
+#define STUDENTNUM 1000                   
+//学生总数，可按需要更改其数值
+SSTUDENT  student[STUDENTNUM]={0};           
+//学生数组(全局变量)
+SSTUDENT  student1;           
+
+//函数声明
+void InputOnestudent(int i);      
+//输入一个学生信息的函数
+void Modifystudent(int bn);      
+ //修改学生信息的函数
+int Addstudent();           
+//添加学生信息的函数
+int insert(int bn);
+int Delestudent(int bn);            
+//删除学生信息的函数
+void OutputOnestudent(int i);      
+//输出一个学生信息的函数
+void  OutputAllstudent(int bn);   
+//输出全部学生详细信息的函数
+//按学生分类查询函数
+void SearchISBN_2(int bn);
+//查询信息 
+int BinSerch(int low,int high,char bisbn[40]);
+//查询代码 
+void tongji2(int bn);    
+//统计信息
+void tongji1(int bn);    
+//统计信息 
+int bn;
+// main函数定义
+int main() 
+{  
+	int select, i=0;
+   while(1)
+   {
+   		system("cls");
+		printf("\n");
+	    printf("\t--------------------------------------\n");
+	    printf("\t*                        *\n");
+	    printf("\t*    学生管理系统    *\n");
+	    printf("\t*                        *\n");
+	    printf("\t---------------------------------------\n\n");
+	    printf("\t    1. 查询学生信息\n");
+	    printf("\t    2. 显示所有学生信息\n");
+	    printf("\t    3. 添加学生信息\n");
+	    printf("\t    4. 删除学生信息\n");
+	    printf("\t    5. 插入学生信息到指定位置\n");
+	    printf("\t    6. 统计旷课的课程及旷课人数\n");
+	    printf("\t    7. 统计学生姓名及其次数\n");
+	    printf("\t    0. 退出程序\n");
+      	printf("\t    请选择序号：");
+		scanf("%d", &select); 
+		getchar();              //该函数用于读取回车符，消除对以后数据输入的影响
+		switch(select)
+		{  
+			case 1: SearchISBN_2(bn);  break;
+			case 2: OutputAllstudent(bn);      break;
+			case 3: bn = Addstudent();  break;
+			case 4: bn = Delestudent(bn);   break;
+			case 5: bn = insert(bn);   break;
+			case 6: tongji2(bn);   break;
+			case 7: tongji1(bn);   break;
+			case 0: 
+				printf("\n 谢谢使用！再见\n");
+				exit(1);
+	        default: printf("\n 按键错误，请重新选择！\n");
+	    } //end switch 
+    } //end while
+    return 0;
+}
+
+
+
+//学生信息管理模块的函数定义
+//====================================================================//
+// 功能：从键盘输入一个学生的全部信息
+void InputOnestudent(int i)  
+{
+	printf("请输入缺课日期(月和日)：");
+	scanf("%d %d", &student[i].time.month, &student[i].time.day);   	
+	printf("请输入第几节课：");	      
+	scanf("%d", &student[i].course);
+	printf("请输入课程名称：");	      
+	scanf("%s", student[i].name1);
+	printf("请输入学生姓名：");	      
+	scanf("%s", student[i].name);
+	printf("请输入缺课类型:");
+	scanf("%s", student[i].classs);
+	getchar();
+}
+//====================================================================//
+// 功能：添加学生信息
+int Addstudent()  
+{  
+	int bn;
+	char c='y';
+	int i;
+	system("cls");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    ---------------添加学生信息界面----------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("请输入要添加多少个学生：");
+	scanf("%d", &bn);
+	getchar();
+	for(i=0; i<bn; i++) 
+    {
+		printf("\n 请输入学生的信息：\n");
+        InputOnestudent(i);                       //调用函数，输入第bn个学生的信息
+    }
+	printf("\n 按任意键继续！\n");    
+	getch();
+    return(bn);                                  //返回添加学生后的数量
+}
+
+
+//====================================================================//
+// 功能：插入学生信息
+int insert(int bn)  
+{  
+    int n;
+	int i;
+	system("cls");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    ---------------插入学生信息界面----------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("请输入要插入的位置(按照0为第一位)：");
+	scanf("%d", &n);
+	getchar();
+	for(i=bn-1; i>=n; i--)
+	{
+		student[i+1]=student[i];
+	}
+	printf("\n 请输入新增学生的信息：\n");
+    InputOnestudent(n);                       //调用函数，输入第bn个学生的信息
+    bn++;
+	printf("\n 按任意键继续！\n");    
+	getch();
+    return bn;                                  //返回添加学生后的数量
+}
+
+//====================================================================//
+// 功能：删除学生信息
+int Delestudent(int bn)  
+{  
+	int i, k=-1;
+    char isbn[20], c1='y', c2;
+    system("cls");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    ----------------删除学生界面-------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+    if(bn==0) 
+	{  
+		printf("\n 学生信息为空，无法执行操作！\n");
+	    return(bn);
+	}
+    while(c1=='y'||c1=='Y')
+	{ 
+		c2='n';
+	    printf("\n 请输入要删除的学生位置：(从0开始)");
+       	scanf("%d", &k);           //找到要删除的学生，用k记录其下标  
+		printf("\n 显示该学生的信息：\n");
+        OutputOnestudent(k);
+        printf("\n 确定要删除该学生的全部信息吗？(y/n):");
+        getchar();
+        scanf("%c", &c2);
+	    if(c2=='y')
+		{
+                       //c2为'y'，表示确定进行删除操作{  			 
+			for(i=k; i<bn-1; i++)                         
+	            student[i]=student[i+1];             //从数组中删除第k个学生 
+	        bn--;                             //学生数量减1
+	        printf("\n 成功删除！\n");
+	    }else                                //c2为'n'，表示不进行删除操作
+	    {
+	    	printf("\n 取消删除！\n");	
+		}
+        printf("\n 继续删除其它设备的信息吗？(y/n):");			
+	getchar();
+        c1=getchar();   
+		getchar();  	
+     } //end while 
+    printf("\n 按任意键继续！\n");   
+	getch();
+	return bn;                            
+}
+//====================================================================//
+// 功能：输出一个学生的全部信息 
+void OutputOnestudent(int i)  
+{
+	printf("缺课日期(月和日)：");
+	printf("%d %d\n", student[i].time.month, student[i].time.day);   	
+	printf("第几节课：");	      
+	printf("%d\n", student[i].course);
+	printf("课程名称：");	      
+	printf("%s\n", student[i].name1);
+	printf("学生姓名：");	      
+	printf("%s\n", student[i].name);
+	printf("缺课类型:");
+	printf("%s\n", student[i].classs);
+}
+
+//====================================================================//
+// 功能：输出全部学生的详细信息
+void  OutputAllstudent(int bn)   
+{  
+	int i;
+	system("cls");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    ----------------统计学生界面-------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	printf("\t    -----------------------------------------------\n");
+	for(i= 0; i<bn; i++)
+	{
+		
+		OutputOnestudent(i);
+	}
+	getchar(); 
+}
+
+//===================================i=================================//
+// 功能：进行学生查询
+void SearchISBN_2(int bn) 
+{
+	int i, j=0;
+	char name[40];
+    printf("\n 请输入学生姓名   ："); 
+    scanf("%s",name);
+    for(i=0; i<bn; i++)
+    {
+        if(strcmp(student[i].name, name)==0){
+        		j=1;
+            printf("\n 所查找的学生信息：\n");
+			OutputOnestudent(i);
+			break;
+		} 
+	}
+    if(j==0)
+	{
+    	printf("查找失败\n");
+	}
+    printf("\n按任意键继续！\n");  
+	getch();
+}
+
+
+//===================================i=================================//
+// 功能：统计学生信息 
+void tongji1(int bn)
+{
+	int i, j, k=0, l=0;
+	int x, y, temp;
+	char name[100][10];
+	char t[100];
+	int a[10]={0};
+	printf("\n 请输入统计的时间 ："); 
+    scanf("%d %d", &x, &y);
+	for(i=0; i<bn; i++)
+	{
+		if(student[i].time.month == x && student[i].time.day == y && strcmp(student[i].classs, "旷课")==0)
+		{
+			for(j=0;j<k;j++)
+			{
+				if(strcmp(student[i].name,name[j])==0)
+				{
+					l++;
+					a[j]++;
+				}
+			}
+			if(l==0)
+			{
+				a[k]++;
+				strcpy(name[k++],student[i].name);
+			}
+		}
+	}
+	for(i=0; i<k; i++)
+	{
+		for(j=i+1; j<k; j++)
+		{
+			if(a[i]<a[j])
+			{
+				strcpy(t,name[i]);
+				strcpy(name[i],name[j]);
+				strcpy(name[j],t);
+				temp=a[i];
+				a[i]=a[j];
+				a[j]=temp;
+			}
+		}
+	}
+	printf("旷课的学生姓名及次数：\n");
+	for(i=0; i<k; i++)
+	{
+		printf("%s %d\n", name[i], a[i]);
+	}
+	getchar();
+	getchar();
+} 
+
+
+//===================================i=================================//
+// 功能：统计学生信息 
+void tongji2(int bn)
+{
+	int i, j, k=0, l=0;
+	int x, y, temp;
+	char name[10][10];
+	char t[10];
+	int a[10]={0};
+	printf("\n 请输入统计的时间 ："); 
+    scanf("%d %d", &x, &y);
+	for(i=0; i<bn; i++)
+	{
+		if(student[i].time.month == x && student[i].time.day == y && strcmp(student[i].classs, "旷课")==0)
+		{
+			for(j=0;j<k;j++)
+			{
+				if(strcmp(student[i].name1,name[j])==0)
+				{
+					l++;
+					a[j]++;
+				}
+			}
+			if(l==0)
+			{
+				a[k]++;
+				strcpy(name[k++],student[i].name1);
+			}
+			l=0;
+		}
+	}
+	for(i=0; i<k; i++)
+	{
+		for(j=i+1; j<k; j++)
+		{
+			if(a[i]<a[j])
+			{
+				strcpy(t,name[i]);
+				strcpy(name[i],name[j]);
+				strcpy(name[j],t);
+				temp=a[i];
+				a[i]=a[j];
+				a[j]=temp;
+			}
+		}
+	}
+	printf("旷课的课程及学生人数：\n");
+	for(i=0; i<k; i++)
+	{
+		printf("%s %d\n", name[i], a[i]);
+	}
+	getchar();
+	getchar();
+} 
